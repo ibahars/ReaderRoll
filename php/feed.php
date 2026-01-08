@@ -34,10 +34,11 @@
 
     //tüm verileri çekme
     $sql = "SELECT books.*, users.username, 
-            (SELECT COUNT(*) FROM comments WHERE comments.book_id = books.id) as yorum_sayisi
-            FROM books 
-            INNER JOIN users ON books.user_id = users.id 
-            ORDER BY books.id DESC";
+        (SELECT COUNT(*) FROM comments WHERE comments.book_id = books.id) as yorum_sayisi,
+        (SELECT COUNT(*) FROM likes WHERE likes.book_id = books.id) as begeni_sayisi
+        FROM books 
+        INNER JOIN users ON books.user_id = users.id 
+        ORDER BY books.id DESC";
 
     $sorgu = $pdo->prepare($sql);
     $sorgu->execute();
@@ -60,6 +61,28 @@
             header("Location: feed.php");
             exit();
         }
+    }
+
+    // Beğeni Butonu İşlemi
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['like-btn'])) {
+        $book_id = $_POST['book_id'];
+        $u_id = $_SESSION['user_id'];
+
+        // Önce bu kullanıcı zaten beğenmiş mi kontrol et
+        $check_like = $pdo->prepare("SELECT id FROM likes WHERE book_id = :bid AND user_id = :uid");
+        $check_like->execute([':bid' => $book_id, ':uid' => $u_id]);
+        
+        if ($check_like->rowCount() == 0) {
+            // Beğenmemişse ekle
+            $insert_like = $pdo->prepare("INSERT INTO likes (book_id, user_id) VALUES (:bid, :uid)");
+            $insert_like->execute([':bid' => $book_id, ':uid' => $u_id]);
+        } else {
+            // Zaten beğenmişse beğeniyi geri çek (Un-like)
+            $delete_like = $pdo->prepare("DELETE FROM likes WHERE book_id = :bid AND user_id = :uid");
+            $delete_like->execute([':bid' => $book_id, ':uid' => $u_id]);
+        }
+        header("Location: feed.php"); // Sayfayı yenile
+        exit();
     }
 ?>
 
@@ -109,29 +132,60 @@
 
                         <div class="interaction-section">
                             <div class="like-comment-stats">
-                                <button class="action-btn like-btn">❤️ Beğen</button>
-                                <span class="stats-text">0 Beğeni</span>
+                                <form method="POST" action="" style="display:inline;">
+                                    <input type="hidden" name="book_id" value="<?php echo $post['id']; ?>">
+                                    <button type="submit" name="like-btn" class="action-btn like-btn">❤️ Beğen</button>
+                                </form>
+
+                                <span class="stats-text" style="cursor:pointer;" onclick="toggleLikes(<?php echo $post['id']; ?>)">
+                                    <?php echo $post['begeni_sayisi']; ?> Beğeni
+                                </span>
+
                                 <span class="stats-text comment-toggle" style="cursor:pointer;" onclick="toggleComments(<?php echo $post['id']; ?>)">
                                     <?php echo $post['yorum_sayisi']; ?> Yorum
                                 </span>
                             </div>
 
-                            
-                            <div id="comment-list-<?php echo $post['id']; ?>" class="comments-display-area" style="display:none;">
+                            <div id="like-list-<?php echo $post['id']; ?>" class="likes-display-area" style="display:none;">
+                                <small>Beğenenler: </small>
                                 <?php
+                                $l_sql = "SELECT users.username FROM likes 
+                                        JOIN users ON likes.user_id = users.id 
+                                        WHERE book_id = :bid";
+                                $l_stmt = $pdo->prepare($l_sql);
+                                $l_stmt->execute([':bid' => $post['id']]);
+                                $begenenler = $l_stmt->fetchAll(PDO::FETCH_COLUMN);
+                                
+                                if (!empty($begenenler)) {
+                                    echo "@" . implode(", @", array_map('htmlspecialchars', $begenenler));
+                                } else {
+                                    echo "Henüz beğeni yok.";
+                                }
+                                ?>
+                            </div>
+
+                            <div id="comment-list-<?php echo $post['id']; ?>" class="comments-display-area" style="display:none;">
+                                <small>Yorumlar:</small>
+                                <?php
+                                // ÖNEMLİ: Her post kartı için yorumları burada, o anki post ID'si ile çekiyoruz
                                 $c_sql = "SELECT comments.*, users.username FROM comments 
                                         JOIN users ON comments.user_id = users.id 
                                         WHERE book_id = :bid ORDER BY created_at ASC";
                                 $c_stmt = $pdo->prepare($c_sql);
                                 $c_stmt->execute([':bid' => $post['id']]);
-                                $yorumlar = $c_stmt->fetchAll(PDO::FETCH_ASSOC);
+                                $post_yorumlari = $c_stmt->fetchAll(PDO::FETCH_ASSOC);
+                                ?>
 
-                                foreach ($yorumlar as $yorum): ?>
-                                    <div class="single-comment">
-                                        <strong>@<?php echo htmlspecialchars($yorum['username']); ?>:</strong>
-                                        <span><?php echo htmlspecialchars($yorum['comment']); ?></span>
-                                    </div>
-                                <?php endforeach; ?>
+                                <?php if (count($post_yorumlari) > 0): ?>
+                                    <?php foreach ($post_yorumlari as $yorum): ?>
+                                        <div class="single-comment">
+                                            <strong>@<?php echo htmlspecialchars($yorum['username']); ?>:</strong> 
+                                            <?php echo htmlspecialchars($yorum['comment']); ?>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <span style="font-size: 12px; color: #888;">Henüz yorum yapılmamış.</span>
+                                <?php endif; ?>
                             </div>
                             
                             <form method="POST" action="" class="comment-input-area">
@@ -158,6 +212,14 @@ function toggleComments(bookId) {
         commentArea.style.display = "block";
     } else {
         commentArea.style.display = "none";
+    }
+}
+function toggleLikes(bookId) {
+    var likeArea = document.getElementById('like-list-' + bookId);
+    if (likeArea.style.display === "none") {
+        likeArea.style.display = "block";
+    } else {
+        likeArea.style.display = "none";
     }
 }
 </script>
