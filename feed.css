@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  background-color: #ededed;
 }
 
 /* ---------Sidebar Styles------*/
@@ -17,6 +18,7 @@ body {
   box-sizing: border-box;
   font-family: Arial, Helvetica, sans-serif;
   font-size: larger;
+  flex-shrink: 0;
 }
 .user-profile {
   display: flex;
@@ -63,4 +65,78 @@ body {
 .logout-button:hover,
 .profile-button:hover {
   background-color: #d1d1d1;
+}
+
+/* ---- main content styles -----*/
+.main-content {
+  flex-grow: 1;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+.feed-container {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.post-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+}
+.post-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.user-badge {
+  font-weight: bold;
+  color: #a994ce;
+}
+
+.category-tag {
+  background: #e0d7f0;
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.book-title {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+}
+
+.author-name {
+  margin: 5px 0;
+  color: #666;
+  font-style: italic;
+}
+
+.post-footer {
+  margin-top: 15px;
+  text-align: right;
+}
+
+.download-link {
+  text-decoration: none;
+  color: white;
+  background-color: #a994ce;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.3s;
+}
+
+.download-link:hover {
+  background-color: #8e7bb3;
 }

@@ -1,5 +1,6 @@
 <?php 
     session_start();
+    
     //db bağlantı
     $host = 'localhost'; $db = 'proje'; $user = 'root'; $pass = ''; $charset = 'utf8mb4';
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -59,6 +60,37 @@
         </form>
       </div>
     </div>
+    <div class="main-content">
+    <div class="feed-container">
+        <div class="post-card">
+            <div class="post-header">
+                <span class="user-badge">@ahmet_yılmaz</span>
+                <span class="category-tag">Roman</span>
+            </div>
+            <div class="post-body">
+                <h2 class="book-title">Körlük</h2>
+                <p class="author-name">Jose Saramago</p>
+            </div>
+            <div class="post-footer">
+                <a href="#" class="download-link">Özeti Gör</a>
+            </div>
+            
+        </div>
 
+        <div class="post-card">
+            <div class="post-header">
+                <span class="user-badge">@elif_okur</span>
+                <span class="category-tag">Bilim</span>
+            </div>
+            <div class="post-body">
+                <h2 class="book-title">Sapiens</h2>
+                <p class="author-name">Yuval Noah Harari</p>
+            </div>
+            <div class="post-footer">
+                <a href="#" class="download-link">Özeti İndir / Görüntüle</a>
+            </div>
+        </div>
+        
+    </div>
 </body>
 </html>
