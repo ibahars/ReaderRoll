@@ -15,13 +15,24 @@
     header("Location: ../login.html"); 
     exit();
     }
+
+    //değişkenleri alma
     $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Misafir';
+    $user_id = $_SESSION['user_id']; 
+
+
+    //son okunanları çekme
+    $kitapSorgu = $pdo->prepare("SELECT name, summary_file FROM books WHERE user_id = :uid ORDER BY id DESC");
+    $kitapSorgu->execute([':uid' => $user_id]);
+    $kitaplar = $kitapSorgu->fetchAll(PDO::FETCH_ASSOC);
 
     //logout butonu
     if(isset($_POST['logout-button'])){
       session_destroy();
       header("Location: ../login.html"); 
     }
+
+    //kitap ekleme
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['summary_file'])){
       $hedefKlasor = "../yuklenenler/";
       $dosyaAdi = time() . "_" . basename($_FILES['summary_file']['name']);
@@ -47,6 +58,10 @@
           }
       }
     }
+
+    
+
+    
 ?>
 
 <!DOCTYPE html>
@@ -78,24 +93,30 @@
       <div class="box">
         <div class="left-box">
           <div class="stats">
-              <div class="last-reads-box">
-            <div class="right-box-title">son okunanlar</div>
-            <div class="last-reads-list">
-              <div class="read-item">
-                <span class="book-item-name">Simyacı</span>
-                <a href="#" class="view-summary">Özeti Gör</a>
-              </div>
-              <div class="read-item">
-                <span class="book-item-name">1984</span>
-                <a href="#" class="view-summary">Özeti Gör</a>
-              </div>
-              <div class="read-item">
-                <span class="book-item-name">Suç ve Ceza</span>
-                <a href="#" class="view-summary">Özeti Gör</a>
-              </div>
+            <div class="last-reads-box">
+                <div class="right-box-title">son okunanlar</div>
+                <div class="last-reads-list">
+                    
+                    <?php if (isset($kitaplar) && count($kitaplar) > 0): ?>
+                        <?php foreach ($kitaplar as $kitap): ?>
+                            <div class="read-item">
+                                <span class="book-item-name">
+                                    <?php echo htmlspecialchars($kitap['name']); ?>
+                                </span>
+                                <a href="<?php echo htmlspecialchars($kitap['summary_file']); ?>" target="_blank" class="view-summary">
+                                    Özeti Gör
+                                </a>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="read-item">
+                            <span class="book-item-name" style="color: #888;">Henüz kitap eklenmemiş.</span>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
             </div>
-          </div>
-          </div>
+    </div>
         </div>
         <div class="right-box">
            <div class="right-box-title">kitap makalesi ekle</div>
