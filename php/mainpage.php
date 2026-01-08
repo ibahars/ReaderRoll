@@ -77,14 +77,24 @@
     <div class="main-content">
       <div class="box">
         <div class="left-box">
-          <div class="current-box">
-            <div class="current-title">En Son Okuduğun</div>
-            <div class="book-photo">kitap fotosu buraya</div>
-            <div class="book-name">kitap ismi</div>
-          </div>
           <div class="stats">
-            <div class="stats-title">Okuma Oranların</div>
-            <div class="stats-text">Bu ay x kadar okudun</div>
+              <div class="last-reads-box">
+            <div class="right-box-title">son okunanlar</div>
+            <div class="last-reads-list">
+              <div class="read-item">
+                <span class="book-item-name">Simyacı</span>
+                <a href="#" class="view-summary">Özeti Gör</a>
+              </div>
+              <div class="read-item">
+                <span class="book-item-name">1984</span>
+                <a href="#" class="view-summary">Özeti Gör</a>
+              </div>
+              <div class="read-item">
+                <span class="book-item-name">Suç ve Ceza</span>
+                <a href="#" class="view-summary">Özeti Gör</a>
+              </div>
+            </div>
+          </div>
           </div>
         </div>
         <div class="right-box">
