@@ -31,6 +31,16 @@
     header("Location: mainpage.php");
     exit();
     }
+
+    //tüm verileri çekme
+    $sql = "SELECT books.*, users.username 
+            FROM books 
+            INNER JOIN users ON books.user_id = users.id 
+            ORDER BY books.id DESC";
+
+    $sorgu = $pdo->prepare($sql);
+    $sorgu->execute();
+    $tum_postlar = $sorgu->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -61,36 +71,32 @@
       </div>
     </div>
     <div class="main-content">
-    <div class="feed-container">
-        <div class="post-card">
-            <div class="post-header">
-                <span class="user-badge">@ahmet_yılmaz</span>
-                <span class="category-tag">Roman</span>
-            </div>
-            <div class="post-body">
-                <h2 class="book-title">Körlük</h2>
-                <p class="author-name">Jose Saramago</p>
-            </div>
-            <div class="post-footer">
-                <a href="#" class="download-link">Özeti Gör</a>
-            </div>
-            
+        <div class="feed-container">
+            <?php if (count($tum_postlar) > 0): ?>
+                <?php foreach ($tum_postlar as $post): ?>
+                    <div class="post-card">
+                        <div class="post-header">
+                            <span class="user-badge">@<?php echo htmlspecialchars($post['username']); ?></span>
+                            <span class="category-tag"><?php echo htmlspecialchars($post['category']); ?></span>
+                        </div>
+                        <div class="post-body">
+                            <h2 class="book-title"><?php echo htmlspecialchars($post['name']); ?></h2>
+                            <p class="author-name"><?php echo htmlspecialchars($post['author']); ?></p>
+                        </div>
+                        <div class="post-footer">
+                            <a href="<?php echo htmlspecialchars($post['summary_file']); ?>" target="_blank" class="download-link">
+                                Özeti Gör
+                            </a>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="post-card">
+                    <p style="text-align:center;">Henüz bir paylaşım yok.</p>
+                </div>
+            <?php endif; ?>
         </div>
-
-        <div class="post-card">
-            <div class="post-header">
-                <span class="user-badge">@elif_okur</span>
-                <span class="category-tag">Bilim</span>
-            </div>
-            <div class="post-body">
-                <h2 class="book-title">Sapiens</h2>
-                <p class="author-name">Yuval Noah Harari</p>
-            </div>
-            <div class="post-footer">
-                <a href="#" class="download-link">Özeti İndir / Görüntüle</a>
-            </div>
-        </div>
-        
     </div>
+
 </body>
 </html>
