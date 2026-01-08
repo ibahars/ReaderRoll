@@ -19,6 +19,9 @@
     //değişkenleri alma
     $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Misafir';
     $user_id = $_SESSION['user_id']; 
+    $name = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : '';
+    $surname = isset($_SESSION['surname']) ? htmlspecialchars($_SESSION['surname']) : '';
+
 
     //logout butonu
     if(isset($_POST['logout-button'])){
@@ -67,25 +70,23 @@
         $book_id = $_POST['book_id'];
         $u_id = $_SESSION['user_id'];
 
-        // Önce bu kullanıcı zaten beğenmiş mi kontrol et
+        //zaten beğenilmiş mi kontrolü
         $check_like = $pdo->prepare("SELECT id FROM likes WHERE book_id = :bid AND user_id = :uid");
         $check_like->execute([':bid' => $book_id, ':uid' => $u_id]);
         
         if ($check_like->rowCount() == 0) {
-            // Beğenmemişse ekle
+            // like olayı
             $insert_like = $pdo->prepare("INSERT INTO likes (book_id, user_id) VALUES (:bid, :uid)");
             $insert_like->execute([':bid' => $book_id, ':uid' => $u_id]);
         } else {
-            // Zaten beğenmişse beğeniyi geri çek (Un-like)
+            // unlike olayı
             $delete_like = $pdo->prepare("DELETE FROM likes WHERE book_id = :bid AND user_id = :uid");
             $delete_like->execute([':bid' => $book_id, ':uid' => $u_id]);
         }
-        header("Location: feed.php"); // Sayfayı yenile
+        header("Location: feed.php"); 
         exit();
     }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,6 +103,10 @@
           <img src="../assets/logo.svg" alt="user-icon" class="sidebar-svg" />
         </div>
         <p><?php echo $username; ?></p>
+        <p class="full-name">
+            <?php echo $name . " ". $surname;
+            ?>
+        </p>
       </div>
       <div class="side-bar-content">
         <form method="POST" action = "">

@@ -34,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($username)) $errors[] = "Kullanıcı Adı boş bırakılamaz.";
     if (empty($name)) $errors[] = "İsim boş bırakılamaz.";
     if (empty($surname)) $errors[] = "Soyad boş bırakılamaz.";
-
     if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Lütfen geçerli bir e-posta adresi girin.";
         header("Refresh: 3; url= ../register.html");

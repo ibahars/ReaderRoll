@@ -18,6 +18,8 @@
 
     //değişkenleri alma
     $username = isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'Misafir';
+    $name    = isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : '';
+    $surname = isset($_SESSION['surname']) ? htmlspecialchars($_SESSION['surname']) : '';
     $user_id = $_SESSION['user_id']; 
 
 
@@ -96,6 +98,9 @@
           <img src="../assets/logo.svg" alt="user-icon" class="sidebar-svg" />
         </div>
         <p><?php echo $username; ?></p>
+        <p class="sidebar-fullname">
+        <?php echo $name . " " . $surname; ?>
+        </p>
       </div>
       <div class="side-bar-content">
         <form method="POST" action = "">

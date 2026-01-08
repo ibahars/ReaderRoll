@@ -41,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
 
-    // password_verify() fonksiyonu, girilen şifreyi (düz metin) veritabanındaki HASH ile karşılaştırır.bu kısıma 
     
     if (password_verify($password, $user['password'])) {
         
@@ -52,14 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['is_logged_in'] = true;
 
         header("Location: mainpage.php");        
-        echo "<h2 style='color: green;'>Giriş Başarılı!</h2>";
-        echo "<div style='border: 1px solid #ccc; padding: 15px; background-color: #f9f9f9;'>";
-        echo "<h3>Hoş geldiniz, " . htmlspecialchars($user['name']) . " " . htmlspecialchars($user['surname']) . "</h3>";
-        echo "<p><strong>Kullanıcı Adınız:</strong> " . htmlspecialchars($user['username']) . "</p>";
-        echo "<p><strong>E-posta Adresiniz:</strong> " . htmlspecialchars($user['email']) . "</p>";
-        echo "</div>";
-        
-        
         exit();
         
     } else {
