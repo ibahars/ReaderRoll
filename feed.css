@@ -55,7 +55,7 @@ body {
 .profile-button {
   width: 85%;
   padding: 12px;
-  background-color: #ededed;
+  background-color: white;
   border-radius: 20px;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
@@ -86,7 +86,7 @@ body {
   flex-direction: column;
   gap: 20px;
   padding-bottom: 50px;
-  padding-top: 150px;
+  padding-top: 750px;
 }
 .post-card {
   background: white;
@@ -134,7 +134,8 @@ body {
 
 .download-link {
   text-decoration: none;
-  color: white;
+  color: black;
+  font-weight: bold;
   background-color: #a994ce;
   padding: 8px 15px;
   border-radius: 8px;
@@ -144,4 +145,85 @@ body {
 
 .download-link:hover {
   background-color: #8e7bb3;
+}
+
+/* ---- Interaction Section Styles ---- */
+.interaction-section {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed #ddd;
+}
+
+.like-comment-stats {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.action-btn {
+  background: none;
+  border: 1px solid #a994ce;
+  color: #a994ce;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+  background-color: #a994ce;
+  color: white;
+}
+
+.stats-text {
+  font-size: 13px;
+  color: #777;
+  font-family: Arial, sans-serif;
+}
+
+/* ---- Comment Input Area Styles ---- */
+.comment-input-area {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  align-items: center;
+}
+
+.comment-input {
+  flex-grow: 1;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px 15px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.3s;
+}
+
+.comment-input:focus {
+  border-color: #a994ce;
+  box-shadow: 0 0 5px rgba(169, 148, 206, 0.3);
+}
+
+.send-comment-btn {
+  background: none;
+  border: none;
+  color: #a994ce;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 15px;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+.send-comment-btn:hover {
+  color: #8e7bb3;
+  text-decoration: underline;
+}
+
+.interaction-section form {
+  margin: 0;
+  padding: 0;
 }

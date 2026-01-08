@@ -41,6 +41,25 @@
     $sorgu = $pdo->prepare($sql);
     $sorgu->execute();
     $tum_postlar = $sorgu->fetchAll(PDO::FETCH_ASSOC);
+
+    // Yorum Gönderme İşlemi
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['send-comment'])) {
+        $comment_text = trim($_POST['comment_text']);
+        $book_id = $_POST['book_id'];
+
+        if (!empty($comment_text)) {
+            $sql = "INSERT INTO comments (book_id, user_id, comment) VALUES (:bid, :uid, :txt)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':bid' => $book_id,
+                ':uid' => $_SESSION['user_id'],
+                ':txt' => $comment_text
+            ]);
+            // Sayfayı yenileyerek yorumun görünmesini sağla
+            header("Location: feed.php");
+            exit();
+        }
+    }
 ?>
 
 
@@ -84,9 +103,24 @@
                             <p class="author-name"><?php echo htmlspecialchars($post['author']); ?></p>
                         </div>
                         <div class="post-footer">
-                            <a href="<?php echo htmlspecialchars($post['summary_file']); ?>" target="_blank" class="download-link">
-                                Özeti Gör
-                            </a>
+                            <a href="<?php echo htmlspecialchars($post['summary_file']); ?>" target="_blank" class="download-link">Özeti Gör</a>
+                        </div>
+
+                        <div class="interaction-section">
+                            <div class="like-comment-stats">
+                                <form method="POST" action="" style="display:inline;">
+                                    <input type="hidden" name="book_id" value="<?php echo $post['id']; ?>">
+                                    <button type="submit" name="like-btn" class="action-btn like-btn">❤️ Beğen</button>
+                                </form>
+                                <span class="stats-text">0 Beğeni</span>
+                                <span class="stats-text">0 Yorum</span>
+                            </div>
+                            
+                            <form method="POST" action="" class="comment-input-area">
+                                <input type="hidden" name="book_id" value="<?php echo $post['id']; ?>">
+                                <input type="text" name="comment_text" placeholder="Yorum ekle..." class="comment-input" required>
+                                <button type="submit" name="send-comment" class="send-comment-btn">Paylaş</button>
+                            </form>
                         </div>
                     </div>
                 <?php endforeach; ?>
@@ -95,6 +129,7 @@
                     <p style="text-align:center;">Henüz bir paylaşım yok.</p>
                 </div>
             <?php endif; ?>
+           
         </div>
     </div>
 
