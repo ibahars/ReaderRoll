@@ -227,3 +227,24 @@ body {
   margin: 0;
   padding: 0;
 }
+
+.comments-display-area {
+    background-color: #f9f9f9;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    max-height: 200px;
+    overflow-y: auto;
+    font-size: 14px;
+}
+
+.single-comment {
+    margin-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 4px;
+}
+
+.comment-toggle:hover {
+    text-decoration: underline;
+    color: #a994ce;
+}

@@ -33,7 +33,8 @@
     }
 
     //tüm verileri çekme
-    $sql = "SELECT books.*, users.username 
+    $sql = "SELECT books.*, users.username, 
+            (SELECT COUNT(*) FROM comments WHERE comments.book_id = books.id) as yorum_sayisi
             FROM books 
             INNER JOIN users ON books.user_id = users.id 
             ORDER BY books.id DESC";
@@ -108,12 +109,29 @@
 
                         <div class="interaction-section">
                             <div class="like-comment-stats">
-                                <form method="POST" action="" style="display:inline;">
-                                    <input type="hidden" name="book_id" value="<?php echo $post['id']; ?>">
-                                    <button type="submit" name="like-btn" class="action-btn like-btn">❤️ Beğen</button>
-                                </form>
+                                <button class="action-btn like-btn">❤️ Beğen</button>
                                 <span class="stats-text">0 Beğeni</span>
-                                <span class="stats-text">0 Yorum</span>
+                                <span class="stats-text comment-toggle" style="cursor:pointer;" onclick="toggleComments(<?php echo $post['id']; ?>)">
+                                    <?php echo $post['yorum_sayisi']; ?> Yorum
+                                </span>
+                            </div>
+
+                            
+                            <div id="comment-list-<?php echo $post['id']; ?>" class="comments-display-area" style="display:none;">
+                                <?php
+                                $c_sql = "SELECT comments.*, users.username FROM comments 
+                                        JOIN users ON comments.user_id = users.id 
+                                        WHERE book_id = :bid ORDER BY created_at ASC";
+                                $c_stmt = $pdo->prepare($c_sql);
+                                $c_stmt->execute([':bid' => $post['id']]);
+                                $yorumlar = $c_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                foreach ($yorumlar as $yorum): ?>
+                                    <div class="single-comment">
+                                        <strong>@<?php echo htmlspecialchars($yorum['username']); ?>:</strong>
+                                        <span><?php echo htmlspecialchars($yorum['comment']); ?></span>
+                                    </div>
+                                <?php endforeach; ?>
                             </div>
                             
                             <form method="POST" action="" class="comment-input-area">
@@ -132,6 +150,17 @@
            
         </div>
     </div>
+
+<script>
+function toggleComments(bookId) {
+    var commentArea = document.getElementById('comment-list-' + bookId);
+    if (commentArea.style.display === "none") {
+        commentArea.style.display = "block";
+    } else {
+        commentArea.style.display = "none";
+    }
+}
+</script>
 
 </body>
 </html>
