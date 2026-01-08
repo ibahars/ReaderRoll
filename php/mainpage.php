@@ -31,6 +31,11 @@
       session_destroy();
       header("Location: ../login.html"); 
     }
+    //feed butonu 
+    if(isset($_POST['feed-button'])){
+    header("Location: feed.php");
+    exit();
+    }
 
     //kitap ekleme
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['summary_file'])){
@@ -69,7 +74,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Reader Roll</title>
     <link rel="stylesheet" href="../mainpage.css" />
   </head>
   <body>
@@ -85,7 +90,7 @@
           <button type="submit" name="logout-button" class="logout-button">Çıkış Yap</button>
         </form>
         <form method="POST" action="">
-          <button type="submit" name="flow-button" class="flow-button">Akışa git</button>
+          <button type="submit" name="feed-button" class="feed-button">Akışa git</button>
         </form>
       </div>
     </div>
@@ -116,7 +121,7 @@
 
                 </div>
             </div>
-    </div>
+          </div>
         </div>
         <div class="right-box">
            <div class="right-box-title">kitap makalesi ekle</div>
