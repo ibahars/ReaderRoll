@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $login_error = "E-posta veya şifre hatalı."; 
 
     if (empty($email) || empty($password)) {
-        echo "<h2 style='color: red;'>Hata: Tüm alanları doldurunuz.</h2>";
+        echo "<h2 style='color: red;'>Lütfen Tüm alanları doldurunuz.</h2>";
         header("Location: ../login.html?error=empty");
         exit();
     }
