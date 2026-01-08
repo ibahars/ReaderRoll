@@ -57,7 +57,6 @@
                 ':uid' => $_SESSION['user_id'],
                 ':txt' => $comment_text
             ]);
-            // Sayfayı yenileyerek yorumun görünmesini sağla
             header("Location: feed.php");
             exit();
         }
@@ -127,7 +126,7 @@
                             <p class="author-name"><?php echo htmlspecialchars($post['author']); ?></p>
                         </div>
                         <div class="post-footer">
-                            <a href="<?php echo htmlspecialchars($post['summary_file']); ?>" target="_blank" class="download-link">Özeti Gör</a>
+                            <a href="<?php echo htmlspecialchars($post['summary_file']); ?>" target="_blank" class="download-link">Değerlendirmeyi Gör</a>
                         </div>
 
                         <div class="interaction-section">

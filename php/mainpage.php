@@ -121,7 +121,7 @@
                                     <?php echo htmlspecialchars($kitap['name']); ?>
                                 </span>
                                 <a href="<?php echo htmlspecialchars($kitap['summary_file']); ?>" target="_blank" class="view-summary">
-                                    Özeti Gör
+                                    Değerlendirmeyi Gör
                                 </a>
                             </div>
                         <?php endforeach; ?>
@@ -158,7 +158,7 @@
                 
                 
                 <div class="file-upload">
-                    <div>Özet Belgesi</div>
+                    <div>Kritik Belgesi</div>
                     <label for="file-input" id="file-label" class="custom-file-upload">
                         Dosya Seç
                     </label>
