@@ -39,32 +39,44 @@
 
     //kitap ekleme
     if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_FILES['summary_file'])){
-      $hedefKlasor = "../yuklenenler/";
-      $dosyaAdi = time() . "_" . basename($_FILES['summary_file']['name']);
-      $tamYol = $hedefKlasor . $dosyaAdi;
+        
+        $max_size = 5 * 1024 * 1024; // 5 MB (Byte cinsinden)
+        $file_size = $_FILES['summary_file']['size'];
+        $file_error = $_FILES['summary_file']['error'];
+        
+        
+        if ($file_size > $max_size) {
+            echo "<script>alert('Hata: Dosya boyutu 5MB\'dan büyük olamaz!');</script>";
+        } 
+        elseif ($file_error !== UPLOAD_ERR_OK) {
+            echo "<script>alert('Dosya yüklenirken bir hata oluştu. Lütfen daha küçük bir dosya deneyin.');</script>";
+        }
+        else {
+            $hedefKlasor = "../yuklenenler/";
+            $dosyaAdi = time() . "_" . basename($_FILES['summary_file']['name']);
+            $tamYol = $hedefKlasor . $dosyaAdi;
 
-      if(move_uploaded_file($_FILES['summary_file']['tmp_name'],$tamYol)){
-          $sql = "INSERT INTO books(user_id, name, author, bookpage,category,summary_file)
-                  VALUES (:uid,:kitap,:yazar,:sayfa,:kat,:dosya)";
+            if(move_uploaded_file($_FILES['summary_file']['tmp_name'], $tamYol)){
+                $sql = "INSERT INTO books(user_id, name, author, bookpage, category, summary_file)
+                        VALUES (:uid, :kitap, :yazar, :sayfa, :kat, :dosya)";
 
-          $sorgu = $pdo->prepare($sql);
-          $sonuc = $sorgu->execute([
-              ":uid"   => $_SESSION["user_id"], 
-              ":kitap" => $_POST["book-name"],
-              ":yazar" => $_POST["author-name"],
-              ":sayfa" => $_POST["page-number"],
-              ":kat"   => $_POST["category-name"],
-              ":dosya" => $tamYol 
-          ]);
-          if ($sonuc) {
-           echo "<script>alert('Kitap makaleniz başarıyla eklendi!');</script>";
-          }else{
-           echo "<script>alert('kitap makaleniz eklenemedi!');</script>";
-          }
-      }
+                $sorgu = $pdo->prepare($sql);
+                $sonuc = $sorgu->execute([
+                    ":uid"   => $_SESSION["user_id"], 
+                    ":kitap" => $_POST["book-name"],
+                    ":yazar" => $_POST["author-name"],
+                    ":sayfa" => $_POST["page-number"],
+                    ":kat"   => $_POST["category-name"],
+                    ":dosya" => $tamYol 
+                ]);
+
+                if ($sonuc) {
+                    header("Location: mainpage.php?status=success");
+                    exit();
+                }
+            }
+        }
     }
-
-    
 
     
 ?>
@@ -165,11 +177,9 @@
           var label = document.getElementById('file-label');
           
           if (input.files.length > 0) {
-              // Dosya seçildiyse butonu güncelle
-              label.textContent = "Dosya Seçildi ✓";
+              label.textContent = "Dosya Seçildi";
               label.classList.add('file-selected-btn');
           } else {
-              // Seçim yoksa eski haline dön
               label.textContent = "Dosya Seç";
               label.classList.remove('file-selected-btn');
           }
