@@ -54,7 +54,7 @@ body {
 
 .input-group input:focus {
   outline: none;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px #a994ce; /* Odaklandığında mor çerçeve */
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 0 2px #a994ce; 
 }
 
 .forgot-password-area {
@@ -63,7 +63,6 @@ body {
 }
 
 .forgot-password-area a {
-  /* Link rengi */
   color: #a994ce;
   text-decoration: none;
   font-size: 14px;

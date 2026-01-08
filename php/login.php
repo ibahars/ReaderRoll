@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     // password_verify() fonksiyonu, girilen şifreyi (düz metin) veritabanındaki HASH ile karşılaştırır.bu kısıma 
-    //internetten baktım
+    
     if (password_verify($password, $user['password'])) {
         
         $_SESSION['user_id'] = $user['id'];

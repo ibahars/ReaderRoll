@@ -131,7 +131,7 @@ body {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 15px; /* Okunan kitaplar arasındaki boşluk */
+  gap: 15px; 
   margin-top: 20px;
 }
 .read-item {
@@ -230,7 +230,7 @@ form {
 }
 .file-upload {
   display: flex;
-  flex-direction: row; /* Yan yana dizilim */
+  flex-direction: row; 
   align-items: center;
   gap: 10px;
   margin-top: 10px;

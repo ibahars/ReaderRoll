@@ -39,7 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $errors[] = "Lütfen geçerli bir e-posta adresi girin.";
         header("Refresh: 3; url= ../register.html");
 
-    }//burada filter_var fonksiyonunu internetten baktım.
+    }
 
     
     if (empty($password) || empty($password_repeat)) {

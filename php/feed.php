@@ -167,7 +167,6 @@
                             <div id="comment-list-<?php echo $post['id']; ?>" class="comments-display-area" style="display:none;">
                                 <small>Yorumlar:</small>
                                 <?php
-                                // ÖNEMLİ: Her post kartı için yorumları burada, o anki post ID'si ile çekiyoruz
                                 $c_sql = "SELECT comments.*, users.username FROM comments 
                                         JOIN users ON comments.user_id = users.id 
                                         WHERE book_id = :bid ORDER BY created_at ASC";
