@@ -144,18 +144,36 @@
                   <input name="category-name" type="text">
                 </div>
                 
+                
                 <div class="file-upload">
-                  <div>Özet Belgesi</div>
-                    <label for="file-input"  class="custom-file-upload">
-                      Dosya Seç
+                    <div>Özet Belgesi</div>
+                    <label for="file-input" id="file-label" class="custom-file-upload">
+                        Dosya Seç
                     </label>
-                    <input id="file-input" name="summary_file" type="file"  class="file-upload-input">
-                  </div>
-                <button class="entry-button" id="entry-button">Kaydet</button>
+                    <input id="file-input" name="summary_file" type="file" class="file-upload-input" onchange="updateFileName()">
+                </div>
+                 <button class="entry-button" id="entry-button">Kaydet</button>
               </form>
            </div>
         </div>
       </div>
     </div>
+
+    <script>
+      function updateFileName() {
+          var input = document.getElementById('file-input');
+          var label = document.getElementById('file-label');
+          
+          if (input.files.length > 0) {
+              // Dosya seçildiyse butonu güncelle
+              label.textContent = "Dosya Seçildi ✓";
+              label.classList.add('file-selected-btn');
+          } else {
+              // Seçim yoksa eski haline dön
+              label.textContent = "Dosya Seç";
+              label.classList.remove('file-selected-btn');
+          }
+      }
+    </script>
   </body>
 </html>
